@@ -1,0 +1,8 @@
+---
+# tasks file for cri-o
+- name: Check Linux version
+  ansible.builtin.debug:
+    msg: "Suppored Debian verion - {{ supported_debian_version }}"
+  failed_when: (ansible_distribution  != 'Debian') and (ansible_facts['ansible_distribution_major_version'] != supported_debian_version)
+
+- include_tasks: "{{ ansible_distribution }}.yml"

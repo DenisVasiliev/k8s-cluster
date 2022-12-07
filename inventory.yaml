@@ -1,0 +1,10 @@
+all:
+  children:
+    k8s:
+      children:
+        k8s-control-plane:
+          hosts:
+            az1.dvuo.ru:
+        k8s-work-nodes:
+          hosts:
+            az[2:3].dvuo.ru:

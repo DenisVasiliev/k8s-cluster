@@ -1,0 +1,5 @@
+- hosts: all
+  user: root
+  roles:
+    # - k8s_cluster_dependencies
+    - cri-o

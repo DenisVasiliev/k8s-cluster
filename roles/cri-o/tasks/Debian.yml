@@ -1,0 +1,45 @@
+---
+
+- name: Set CRI-O distribution version
+  ansible.builtin.set_fact:
+    crio_os: "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
+
+- name: /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+  ansible.builtin.template:
+    src: Debian/devel-kubic-libcontainers-stable.list.j2
+    dest: /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+
+- name: /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}.list
+  ansible.builtin.template:
+    src: Debian/devel-kubic-libcontainers-stable-crio.list.j2
+    dest: /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}.list
+
+- name: Add libcontainers-archive apt repository key.
+  ansible.builtin.get_url:
+    url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/{{ crio_os }}/Release.key"
+    dest: /usr/share/keyrings/libcontainers-archive-keyring.asc
+    mode: '0644'
+    force: true
+
+- name: Add libcontainers-crio-archive apt repository key.
+  ansible.builtin.get_url:
+    url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{ crio_version }}/{{ crio_os }}/Release.key"
+    dest: /usr/share/keyrings/libcontainers-crio-archive-keyring.asc
+    mode: '0644'
+    force: true
+
+- name: Install packages
+  ansible.builtin.apt:
+    state: present
+    update_cache: yes
+    pkg: 
+      - cri-o
+      - cri-o-runc
+      - cri-tools
+
+- name: Enable crio service
+  ansible.builtin.systemd:
+    state: started
+    enabled: true
+    daemon_reload: true
+    name: crio

@@ -1,0 +1,10 @@
+all:
+  children:
+    k8s:
+      children:
+        k8s-control-plane:
+          hosts:
+            master[1:3].example.com:
+        k8s-work-nodes:
+          hosts:
+            node[1:3].example.com:

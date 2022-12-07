@@ -1,0 +1,5 @@
+---
+# defaults file for cri-o
+
+supported_debian_version: 11
+crio_version: "1.24"

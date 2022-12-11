@@ -1,0 +1,3 @@
+---
+# tasks file for kubeadm
+- include_tasks: "{{ ansible_distribution }}.yml"
